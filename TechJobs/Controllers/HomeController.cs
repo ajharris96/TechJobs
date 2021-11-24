@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TechJobs.Models;
 using TechJobs.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using TechJobs.Data;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -81,19 +82,34 @@ namespace TechJobs.Controllers
                
                 context.SaveChanges();
 
-                //SmtpClient smtpClient = new SmtpClient("smtp.gmail.com")
-                //{
-                //    Port = 587,
-                //    Credentials = new NetworkCredential("techjobspersistent@gmail.com", "LaunchCode75?"),
-                //    EnableSsl = true,
-                //};
+                SmtpClient smtpClient = new SmtpClient("smtp.gmail.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential("techjobspersistent@gmail.com", "LaunchCode75?"),
+                    EnableSsl = true,
+                };
 
-                //List<User> users = context.User.ToList();
 
-                //foreach (User u in users)
-                //{
-                //    u.SendUpdate(job1[0], smtpClient);
-                //}
+                List<IdentityUser> users = context.Users.ToList();
+
+
+
+                foreach (IdentityUser u in users)
+                {
+                    string bodyHTML = "<h3>A new job for you was just posted!</h3>";
+                    bodyHTML += "<p>" + job1[0].Name + ", " + job1[0].Employer.Name + ", " + job1[0].Employer.Location + "</p>";
+                    var mailMessage = new MailMessage
+                    {
+                        From = new MailAddress("techjobspersistent@gmail.com"),
+                        Subject = "New job posting!",
+                        Body = bodyHTML,
+                        IsBodyHtml = true,
+                    };
+
+                    mailMessage.To.Add(u.Email);
+
+                    smtpClient.Send(mailMessage);
+                }
 
 
 
