@@ -1,0 +1,28 @@
+﻿@using TechJobs.ViewModels
+@model AddEmployerViewModel
+
+
+<h1>Add New Employer</h1>
+
+<form asp-controller="Employer" asp-action="ProcessAddEmployerForm" method="post">
+    <div class="form-group">
+        <label asp-for="Name">Employer Name: </label>
+        <input asp-for="Name" />
+        <br />
+        <span class="form-text text-muted" asp-validation-for="Name"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Location">Employer Location: </label>
+        <input asp-for="Location" />
+        <br />
+        <span class="form-text text-muted" asp-validation-for="Location"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Url">Employer URL: </label>
+        <input asp-for="Url" />
+        <br />
+        <span class="form-text text-muted" asp-validation-for="Url"></span>
+    </div>
+
+    <input class="btn btn-primary" type="submit" value="Submit" />
+</form>

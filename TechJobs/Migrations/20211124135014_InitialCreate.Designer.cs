@@ -9,7 +9,7 @@ using TechJobs.Data;
 namespace TechJobs.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211124031016_InitialCreate")]
+    [Migration("20211124135014_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
