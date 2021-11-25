@@ -1,13 +1,16 @@
-﻿@{
-    if (ViewData.TryGetValue("ParentLayout", out var parentLayout))
+﻿@using Microsoft.AspNetCore.Identity
+@using TechJobs.Models 
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{ if (ViewData.TryGetValue("ParentLayout", out var parentLayout))
     {
         Layout = (string)parentLayout;
     }
     else
     {
         Layout = "/Areas/Identity/Pages/_Layout.cshtml";
-    }
-}
+    } }
 
 <h2>Manage your account</h2>
 
