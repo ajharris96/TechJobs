@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Mail;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using TechJobs.Services;
 
 namespace TechJobs.Controllers
 {
@@ -60,7 +61,7 @@ namespace TechJobs.Controllers
                 int i = 0;
                 List<Job> list = context.Jobs.Include(j=>j.Employer).ToList();
 
-                List<Job> job1 = context.Jobs.Where(j => j.Name == job.Name).Where(j => j.EmployerId == job.EmployerId).Include(j => j.Employer).ToList();
+                
 
                 foreach (Job j in list)
                 {
@@ -83,36 +84,14 @@ namespace TechJobs.Controllers
                
                 context.SaveChanges();
 
-                SmtpClient smtpClient = new SmtpClient("smtp.gmail.com")
-                {
-                    Port = 587,
-                    Credentials = new NetworkCredential("techjobspersistent@gmail.com", "LaunchCode75?"),
-                    EnableSsl = true,
-                };
+                
+
+                List<ApplicationUser> users = context.Users.ToList();
+                Job newestJob = context.Jobs.Where(j => j.Name == job.Name).Where(j => j.EmployerId == job.EmployerId).Include(j => j.Employer).ToList()[0];
 
 
-                List<IdentityUser> users = context.Users.ToList();
-
-
-
-                foreach (IdentityUser u in users)
-                {
-                    string bodyHTML = "<h3>A new job for you was just posted!</h3>";
-                    bodyHTML += "<p>" + job1[0].Name + ", " + job1[0].Employer.Name + ", " + job1[0].Employer.Location + "</p>";
-                    var mailMessage = new MailMessage
-                    {
-                        From = new MailAddress("techjobspersistent@gmail.com"),
-                        Subject = "New job posting!",
-                        Body = bodyHTML,
-                        IsBodyHtml = true,
-                    };
-
-                    mailMessage.To.Add(u.Email);
-
-                    smtpClient.Send(mailMessage);
-                }
-
-
+                Emailer.Notify(users, newestJob);
+             
 
 
 

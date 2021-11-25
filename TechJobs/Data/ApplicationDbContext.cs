@@ -7,7 +7,7 @@ using TechJobs.Models;
 
 namespace TechJobs.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Job> Jobs { get; set; }
         public DbSet<Employer> Employers { get; set; }
