@@ -13,6 +13,7 @@ using TechJobs.ViewModels;
 
 namespace TechJobs.Controllers
 {
+    [Authorize]
     public class SkillController : Controller
     {
         private ApplicationDbContext context;

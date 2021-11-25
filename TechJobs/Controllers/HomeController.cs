@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace TechJobs.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private ApplicationDbContext context;

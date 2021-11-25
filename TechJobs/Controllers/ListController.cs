@@ -7,11 +7,13 @@ using TechJobs.Models;
 using TechJobs.Data;
 using Microsoft.EntityFrameworkCore;
 using TechJobs.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TechJobs.Controllers
 {
+    [Authorize]
     public class ListController : Controller
     {
         internal static Dictionary<string, string> ColumnChoices = new Dictionary<string, string>()

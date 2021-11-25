@@ -21,8 +21,17 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+                        @if (User.IsInRole("manager"))
+                        {
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AddJob">Add Job</a>
+                        </li>
+                        }
+                        <li>
+                            <a class="nav-link text-dark" asp-controller="List" asp-action="Index">List Jobs</a>
+                        </li>
+                        <li>
+                            <a class="nav-link text-dark" asp-controller="Search" asp-action="Index">Search Jobs</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />

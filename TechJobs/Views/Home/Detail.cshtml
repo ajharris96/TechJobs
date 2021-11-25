@@ -14,4 +14,6 @@
 
 </table>
 
+@if (User.IsInRole("manager")) { 
 <a asp-controller="Skill" asp-action="AddJob" asp-route-id="@Model.JobId">Add additional skills</a>
+}
