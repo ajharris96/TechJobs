@@ -16,6 +16,9 @@ using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using TechJobs.Services;
 
+
+
+
 namespace TechJobs.Controllers
 {
     [Authorize]
@@ -117,6 +120,46 @@ namespace TechJobs.Controllers
 
             JobDetailViewModel viewModel = new JobDetailViewModel(theJob, jobSkills);
             return View(viewModel);
+        }
+
+
+        public IActionResult JobsByMyLocation()
+        {
+            List<Job> jobs = context.Jobs.ToList();
+            List<Employer> employers = context.Employers.ToList();
+            List<Job> userJobs = new List<Job>();
+            ApplicationUser user = context.Users.Where(u => u.UserName == User.Identity.Name).ToList()[0];
+
+            foreach (Employer e in employers)
+            {
+                if (e.Location.ToLower() == user.Location.ToLower())
+                {
+                    foreach (Job job in jobs)
+                    {
+                        if (e.Id == job.EmployerId)
+                        {
+                            userJobs.Add(job);
+                        }
+                    }
+                }
+            }
+
+            string bodyHTML = "<h2>Here are the best job opportunities available to you!</h1></br><ul>";
+
+            for (int i = 0; i < userJobs.Count; i++)
+            {
+                bodyHTML += "<li>" + userJobs[i].Name + ", " + userJobs[i].Employer.Name + ", " + userJobs[i].Employer.Location + "</li></br>";
+            }
+
+            bodyHTML += "</ul>";
+
+            Emailer.LocationEmail(bodyHTML, user);
+
+            List<Job> jobs1 = context.Jobs.Include(j => j.Employer).ToList();
+
+
+
+            return View("Index", jobs1);
         }
     }
 }

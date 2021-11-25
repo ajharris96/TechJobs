@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using TechJobs.Models;
 using System.Collections.Generic;
-
+using TechJobs.Data;
+using System.Linq;
 
 
 namespace TechJobs.Models
@@ -19,5 +20,7 @@ namespace TechJobs.Models
         public ApplicationUser()
         {
         }
+
+        
     }
 }

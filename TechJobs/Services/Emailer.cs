@@ -21,12 +21,6 @@ namespace TechJobs.Services
         };
 
         
-
-        public Emailer()
-        {
-        }
-
-
         public static void Notify(List<ApplicationUser> users, Job j)
         {
             foreach (ApplicationUser u in users)
@@ -49,5 +43,40 @@ namespace TechJobs.Services
                 }
             }
         }
+
+        public static void LocationEmail(string bodyHTML, ApplicationUser user)
+        {
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress("techjobspersistent@gmail.com"),
+                Subject = "Jobs in your location!",
+                Body = bodyHTML,
+                IsBodyHtml = true,
+            };
+
+            mailMessage.To.Add(user.Email);
+
+            smtpClient.Send(mailMessage);
+        }
+
+        public static void InitialEmail(ApplicationUser user)
+        {
+            string bodyHTML = "<h2>Thanks for signing up to receive email notification!</h2>";
+
+            
+
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress("techjobspersistent@gmail.com"),
+                Subject = "Welcome, " + user.FirstName + "!",
+                Body = bodyHTML,
+                IsBodyHtml = true,
+            };
+
+            mailMessage.To.Add(user.Email);
+
+            smtpClient.Send(mailMessage);
+        }
+
     }
 }

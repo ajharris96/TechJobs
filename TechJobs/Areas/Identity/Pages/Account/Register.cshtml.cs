@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using TechJobs.Models;
+using TechJobs.Services;
+using TechJobs.Data;
 
 namespace TechJobs.Areas.Identity.Pages.Account
 {
@@ -100,6 +102,13 @@ namespace TechJobs.Areas.Identity.Pages.Account
                     Location = Input.Location,
                     Notify = Input.Notify
                 };
+
+                if (user.Notify)
+                {
+                    Emailer.InitialEmail(user);
+                }
+
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
