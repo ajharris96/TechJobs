@@ -20,21 +20,25 @@
                 <ul>
                     @if (category == "employer")
                     {
+                        <div style="column-count: 3;">
                         @foreach (var item in ViewBag.employers)
                         {
-                            <li>
+                            <li style="break-inside: avoid-column; margin:5px;">
                                 <a asp-controller="List" asp-action="Jobs" asp-route-column="@category" asp-route-value="@item.Name">@item.Name</a>
                             </li>
                         }
+                        </div> 
                     }
                     else
                     {
+                        <div style="column-count: 3;">
                         @foreach (var item in ViewBag.skills)
                         {
-                            <li>
+                            <li style="break-inside: avoid-column; margin: 5px;">
                                 <a asp-controller="List" asp-action="Jobs" asp-route-column="@category" asp-route-value="@item.Name">@item.Name</a>
                             </li>
                         }
+                        </div>
                     }
 
                 </ul>

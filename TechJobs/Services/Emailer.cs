@@ -20,20 +20,31 @@ namespace TechJobs.Services
             EnableSsl = true,
         };
 
-        
+        private static string NotifyHtml = System.IO.File.ReadAllText("index2.html");
+
+
+
         public static void Notify(List<ApplicationUser> users, Job j)
         {
             foreach (ApplicationUser u in users)
             {
                 if (u.Notify)
                 {
-                    string bodyHTML = "<h3>A new job for you was just posted, " + u.FirstName + "!</h3>";
-                    bodyHTML += "<p>" + j.Name + ", " + j.Employer.Name + ", " + j.Employer.Location + "</p>";
+                    //string bodyHTML = "<h3>A new job for you was just posted, " + u.FirstName + "!</h3>";
+                    //bodyHTML += "<p>" + j.Name + ", " + j.Employer.Name + ", " + j.Employer.Location + "</p>";
+
+                    //string body = String.Format(NotifyHtml, u.FirstName, j.Name, j.Employer.Name, j.Employer.Location);
+
+                    string body = NotifyHtml.Replace("{0}", u.FirstName);
+                    body = body.Replace("{1}", j.Name);
+                    body = body.Replace("{2}", j.Employer.Name);
+                    body = body.Replace("{3}", j.Employer.Location);
+
                     var mailMessage = new MailMessage
                     {
                         From = new MailAddress("techjobspersistent@gmail.com"),
                         Subject = "Hey " + u.FirstName + ", new job posting!",
-                        Body = bodyHTML,
+                        Body = body,
                         IsBodyHtml = true,
                     };
 

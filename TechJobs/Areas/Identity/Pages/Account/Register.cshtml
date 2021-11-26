@@ -43,12 +43,23 @@
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Input.Notify"></label>
-                <input type="checkbox" asp-for="Input.Notify" class="form-control" />
-                <span asp-validation-for="Input.Notify" class="text-danger"></span>
-            </div>
-            <button type="submit" class="btn btn-primary">Register</button>
-        </form>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+
+                            <input type="checkbox" asp-for="Input.Notify" />
+
+
+                        </div>
+                    </div>
+                    <label class="form-control" asp-for="Input.Notify"></label>
+                </div>
+                        
+                        
+                        <span asp-validation-for="Input.Notify" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Register</button>
+</form>
     </div>
     @*<div class="col-md-6 col-md-offset-2">
         <section>

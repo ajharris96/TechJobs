@@ -99,3 +99,26 @@ table.job-listing {
 .skills {
     column-count: 6;
 }
+
+a {
+    outline: none;
+    text-decoration: none;
+    padding: 2px 1px 0;
+    color: blue;
+}
+
+    a:link {
+        color: blue;
+    }
+
+    a:focus {
+        border-bottom: 1px solid;
+    }
+
+    a:hover {
+        border-bottom: 1px solid;
+    }
+
+    a:active {
+        
+    }

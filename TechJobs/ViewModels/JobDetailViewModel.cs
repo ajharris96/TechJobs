@@ -10,12 +10,14 @@ namespace TechJobs.ViewModels
         public string Name { get; set; }
         public string EmployerName { get; set; }
         public string SkillText { get; set; }
+        public string EmployerUrl { get; set; }
 
         public JobDetailViewModel(Job theJob, List<JobSkill> jobSkills)
         {
             JobId = theJob.Id;
             Name = theJob.Name;
             EmployerName = theJob.Employer.Name;
+            EmployerUrl = theJob.Employer.Url;
 
             SkillText = "";
             for (int i = 0; i < jobSkills.Count; i++)
