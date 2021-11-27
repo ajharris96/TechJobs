@@ -144,7 +144,7 @@ namespace TechJobs.Controllers
                 }
             }
 
-            string bodyHTML = "<h2>Here are the best job opportunities available to you!</h1></br><ul>";
+            string bodyHTML = "<img src='https://i.imgur.com/SJg5nzm.png' style='width: 170px;height: auto;padding: 15px 0px 0px 0px;'></br><h2>Here are the best job opportunities available to you!</h1></br><ul>";
 
             for (int i = 0; i < userJobs.Count; i++)
             {

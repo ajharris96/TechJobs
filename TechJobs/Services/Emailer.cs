@@ -20,7 +20,7 @@ namespace TechJobs.Services
             EnableSsl = true,
         };
 
-        private static string NotifyHtml = System.IO.File.ReadAllText("index2.html");
+        private static string NotifyHtml = System.IO.File.ReadAllText("notify.html");
 
 
 
@@ -72,7 +72,7 @@ namespace TechJobs.Services
 
         public static void InitialEmail(ApplicationUser user)
         {
-            string bodyHTML = "<h2>Thanks for signing up to receive email notification!</h2>";
+            string bodyHTML = "<img src='https://i.imgur.com/SJg5nzm.png' style='width: 170px;height: auto;padding: 15px 0px 0px 0px;'><h2>Thanks for signing up to receive email notification!</h2>";
 
             
 
