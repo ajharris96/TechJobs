@@ -21,6 +21,7 @@ namespace TechJobs.Services
         };
 
         private static string NotifyHtml = System.IO.File.ReadAllText("notify.html");
+        public static string footer = "<br><br><br><p style='padding: 20px 0px; font-size: 12px; color: #777777; text-align: center;'>&#xA9; Copyright 2021 TechJobs All Rights Reserved.</p>";
 
 
 
@@ -57,6 +58,8 @@ namespace TechJobs.Services
 
         public static void LocationEmail(string bodyHTML, ApplicationUser user)
         {
+            bodyHTML += footer;
+
             var mailMessage = new MailMessage
             {
                 From = new MailAddress("techjobspersistent@gmail.com"),
@@ -72,8 +75,8 @@ namespace TechJobs.Services
 
         public static void InitialEmail(ApplicationUser user)
         {
-            string bodyHTML = "<img src='https://i.imgur.com/SJg5nzm.png' style='width: 170px;height: auto;padding: 15px 0px 0px 0px;'><h2>Thanks for signing up to receive email notification!</h2>";
-
+            string bodyHTML = "<img src='https://i.imgur.com/SJg5nzm.png' style='width: 170px;height: auto; border-radius: 15px;'><h2>Thanks for signing up to receive email notification!</h2>";
+            bodyHTML += footer;
             
 
             var mailMessage = new MailMessage
