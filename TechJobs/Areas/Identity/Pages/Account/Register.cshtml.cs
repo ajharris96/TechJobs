@@ -26,17 +26,22 @@ namespace TechJobs.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private ApplicationDbContext context;
+        public List<string> locations;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender, ApplicationDbContext dbcontext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            context = dbcontext;
+            locations = context.Employers.Select(e => e.Location).Distinct().ToList();
+            
         }
 
         [BindProperty]
@@ -76,7 +81,7 @@ namespace TechJobs.Areas.Identity.Pages.Account
             [Display(Name = "Location")]
             public string Location { get; set; }
 
-            [Display(Name = "Notify me by Email")]
+            [Display(Name = "Notify me of new job postings")]
             public bool Notify { get; set; }
 
 
@@ -86,6 +91,7 @@ namespace TechJobs.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
