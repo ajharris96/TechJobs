@@ -35,9 +35,13 @@ namespace TechJobs.Controllers
 
         public IActionResult Index()
         {
+            
             List<Job> jobs = context.Jobs.Include(j => j.Employer).ToList();
+            var rnd = new Random();
+            List<Job> jobs1 = jobs.OrderBy(item => rnd.Next()).ToList();
 
-            return View(jobs);
+
+            return View(jobs1);
         }
 
         [Authorize(Roles = "manager")]

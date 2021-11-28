@@ -40,7 +40,7 @@ namespace TechJobs.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             context = dbcontext;
-            locations = context.Employers.Select(e => e.Location).Distinct().ToList();
+            locations = context.Employers.Select(e => e.Location).Distinct().OrderBy(x => x).ToList();
             
         }
 
