@@ -26,7 +26,7 @@ namespace TechJobs.Services
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("techjobspersistent@gmail.com", "Password Recovery"),
+                From = new EmailAddress("techjobspersistent@gmail.com", "TechJobs"),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TechJobs.Models;
+using TechJobs.Data;
 
 namespace TechJobs.Areas.Identity.Pages.Account.Manage
 {
@@ -14,13 +15,19 @@ namespace TechJobs.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private ApplicationDbContext context;
+        public List<string> locations;
+        
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager, ApplicationDbContext dbcontext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            context = dbcontext;
+            locations = context.Employers.Select(e => e.Location).Distinct().OrderBy(x => x).ToList();
+            
         }
 
         public string Username { get; set; }
@@ -36,19 +43,29 @@ namespace TechJobs.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+
+            [Required]
+            [Display(Name = "Location")]
+            public string Location { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            
 
             Username = userName;
 
             Input = new InputModel
             {
                 PhoneNumber = phoneNumber
+                
             };
+
+
+
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -87,6 +104,14 @@ namespace TechJobs.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+            var userName = await _userManager.GetUserNameAsync(user);
+
+            ApplicationUser user1 = context.Users.Where(u => u.UserName == userName).ToList()[0];
+
+            user1.Location = Input.Location;
+
+            context.Users.Update(user1);
+            context.SaveChanges();
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

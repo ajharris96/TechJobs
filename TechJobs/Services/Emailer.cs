@@ -40,7 +40,7 @@ namespace TechJobs.Services
 
                     var mailMessage = new MailMessage
                     {
-                        From = new MailAddress("techjobspersistent@gmail.com"),
+                        From = new MailAddress("techjobspersistent@gmail.com","TechJobs"),
                         Subject = "Hey " + u.FirstName + ", new job posting!",
                         Body = body,
                         IsBodyHtml = true,
@@ -59,7 +59,7 @@ namespace TechJobs.Services
 
             var mailMessage = new MailMessage
             {
-                From = new MailAddress("techjobspersistent@gmail.com"),
+                From = new MailAddress("techjobspersistent@gmail.com","TechJobs"),
                 Subject = "Jobs in your location!",
                 Body = bodyHTML,
                 IsBodyHtml = true,
@@ -78,7 +78,7 @@ namespace TechJobs.Services
 
             var mailMessage = new MailMessage
             {
-                From = new MailAddress("techjobspersistent@gmail.com"),
+                From = new MailAddress("techjobspersistent@gmail.com","TechJobs"),
                 Subject = "Welcome, " + user.FirstName + "!",
                 Body = bodyHTML,
                 IsBodyHtml = true,
