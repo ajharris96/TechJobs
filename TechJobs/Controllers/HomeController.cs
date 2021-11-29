@@ -148,20 +148,31 @@ namespace TechJobs.Controllers
                 }
             }
 
-            string bodyHTML = "<img src='https://i.imgur.com/SJg5nzm.png' style='width: 170px; height: auto; border-radius: 15px;'></br><h2>Here are the best job opportunities available to you!</h1></br><ul>";
-
-            for (int i = 0; i < userJobs.Count; i++)
+            if (userJobs.Count == 0)
             {
-                bodyHTML += "<li>" + userJobs[i].Name + ", " + userJobs[i].Employer.Name + ", " + userJobs[i].Employer.Location + "</li></br>";
+                string zeroHTML = "<img src='https://i.imgur.com/SJg5nzm.png' style='width: 170px; height: auto; border-radius: 15px;'></br><h2>There are no jobs currently available in your city!</h1></br>";
+                zeroHTML += Emailer.footer;
+                Emailer.LocationEmail(zeroHTML, user);
+            }
+            else
+            {
+
+                string bodyHTML = "<img src='https://i.imgur.com/SJg5nzm.png' style='width: 170px; height: auto; border-radius: 15px;'></br><h2>Here are the best job opportunities available to you!</h1></br><ul>";
+
+                for (int i = 0; i < userJobs.Count; i++)
+                {
+                    bodyHTML += "<li>" + userJobs[i].Name + ", " + "<a href='" + userJobs[i].Employer.Url + "'>" + userJobs[i].Employer.Name + "</a>" + ", " + userJobs[i].Employer.Location + "</li></br>";
+                }
+
+                bodyHTML += "</ul>";
+
+                Emailer.LocationEmail(bodyHTML, user);
+
+                
+
             }
 
-            bodyHTML += "</ul>";
-
-            Emailer.LocationEmail(bodyHTML, user);
-
             List<Job> jobs1 = context.Jobs.Include(j => j.Employer).ToList();
-
-
 
             return View("Index", jobs1);
         }

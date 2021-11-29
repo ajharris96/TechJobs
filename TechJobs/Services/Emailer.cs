@@ -35,7 +35,7 @@ namespace TechJobs.Services
 
                     string body = NotifyHtml.Replace("{0}", u.FirstName);
                     body = body.Replace("{1}", j.Name);
-                    body = body.Replace("{2}", j.Employer.Name);
+                    body = body.Replace("{2}", "<a href='"+j.Employer.Url+"'>" + j.Employer.Name +"</a>");
                     body = body.Replace("{3}", j.Employer.Location);
 
                     var mailMessage = new MailMessage

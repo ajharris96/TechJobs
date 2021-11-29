@@ -48,6 +48,9 @@ namespace TechJobs.Areas.Identity.Pages.Account.Manage
             [Required]
             [Display(Name = "Location")]
             public string Location { get; set; }
+
+            [Display(Name = "Notify me of new job postings")]
+            public bool Notify { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
@@ -109,6 +112,7 @@ namespace TechJobs.Areas.Identity.Pages.Account.Manage
             ApplicationUser user1 = context.Users.Where(u => u.UserName == userName).ToList()[0];
 
             user1.Location = Input.Location;
+            user1.Notify = Input.Notify;
 
             context.Users.Update(user1);
             context.SaveChanges();
