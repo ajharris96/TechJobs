@@ -31,10 +31,7 @@ namespace TechJobs.Services
             {
                 if (u.Notify)
                 {
-                    //string bodyHTML = "<h3>A new job for you was just posted, " + u.FirstName + "!</h3>";
-                    //bodyHTML += "<p>" + j.Name + ", " + j.Employer.Name + ", " + j.Employer.Location + "</p>";
-
-                    //string body = String.Format(NotifyHtml, u.FirstName, j.Name, j.Employer.Name, j.Employer.Location);
+                    
 
                     string body = NotifyHtml.Replace("{0}", u.FirstName);
                     body = body.Replace("{1}", j.Name);

@@ -14,7 +14,7 @@ namespace TechJobs.Models
         public string LastName { get; set; }
         public bool Notify { get; set; }
         public string Location { get; set; }
-        //public List<Skill> Skills { get; set; }
+        
 
 
         public ApplicationUser()
