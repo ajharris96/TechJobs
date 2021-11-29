@@ -108,8 +108,12 @@ namespace TechJobs.Areas.Identity.Pages.Account
                     Location = Input.Location,
                     Notify = Input.Notify
                 };
+                if (user.Notify)
+                {
+                    Emailer.InitialEmail(user);
+                }
 
-                
+
 
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -127,10 +131,7 @@ namespace TechJobs.Areas.Identity.Pages.Account
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"<img src='https://i.imgur.com/SJg5nzm.png' style='width: 170px;height: auto; border-radius: 15px;'><br><br>Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.<br><br><br><p style='padding: 20px 0px; font-size: 12px; color: #777777; text-align: center;'>&#xA9; Copyright 2021 TechJobs All Rights Reserved.</p>");
-                    if (user.Notify)
-                    {
-                        Emailer.InitialEmail(user);
-                    }
+                    
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
