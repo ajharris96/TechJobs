@@ -75,7 +75,7 @@ namespace TechJobs.Services
 
         public static void InitialEmail(ApplicationUser user)
         {
-            string bodyHTML = "<img src='https://i.imgur.com/SJg5nzm.png' style='width: 170px;height: auto; border-radius: 15px;'><h2>Thanks for signing up to receive email notification!</h2>";
+            string bodyHTML = "<img src='https://i.imgur.com/SJg5nzm.png' style='width: 170px;height: auto; border-radius: 15px;'><h2>Thanks for signing up to receive email notifications!</h2>";
             bodyHTML += footer;
             
 

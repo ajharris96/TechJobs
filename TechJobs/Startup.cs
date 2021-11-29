@@ -9,6 +9,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using TechJobs.Models;
+using TechJobs.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
+
+
 
 //using TechJobs.Services;
 
@@ -41,11 +45,11 @@ namespace TechJobs
 
             services.AddScoped<SignInManager<ApplicationUser>, SignInManager<ApplicationUser>>();
 
-            
 
 
-            //services.AddTransient<IEmailSender, EmailSender>();
-            //services.Configure<AuthMessageSenderOptions>(Configuration);
+
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
 
 
 

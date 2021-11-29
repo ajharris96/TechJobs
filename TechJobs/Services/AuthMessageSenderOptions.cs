@@ -1,14 +1,14 @@
-﻿//using System;
-//namespace TechJobs.Services
-//{
-//    public class AuthMessageSenderOptions
-//    {
+﻿using System;
+namespace TechJobs.Services
+{
+    public class AuthMessageSenderOptions
+    {
 
-//        public string SendGridKey { get; set; }
+        public string SendGridKey { get; set; }
 
 
-//        public AuthMessageSenderOptions()
-//        {
-//        }
-//    }
-//}
+        public AuthMessageSenderOptions()
+        {
+        }
+    }
+}
