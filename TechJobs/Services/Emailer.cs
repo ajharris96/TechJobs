@@ -13,18 +13,18 @@ namespace TechJobs.Services
 {
     public class Emailer
     {
-        private static SmtpClient smtpClient = new SmtpClient("smtp.gmail.com")
+        private static readonly SmtpClient s_smtpClient = new SmtpClient("smtp.gmail.com")
         {
             Port = 587,
             Credentials = new NetworkCredential("techjobspersistent@gmail.com", "LaunchCode75?"),
             EnableSsl = true,
         };
 
-        private static string NotifyHtml = System.IO.File.ReadAllText("notify.html");
+        private static readonly string s_notifyHTML = System.IO.File.ReadAllText("notify.html");
 
-        private static string Footer = "<br><br><br><p style='padding: 20px 0px; font-size: 12px; color: #777777; text-align: center;'>&#xA9; Copyright 2021 TechJobs All Rights Reserved.</p>";
+        private static readonly string s_footer = "<br><br><br><p style='padding: 20px 0px; font-size: 12px; color: #777777; text-align: center;'>&#xA9; Copyright 2021 TechJobs All Rights Reserved.</p>";
 
-        private static string LogoTag = "<img src='https://i.imgur.com/SJg5nzm.png' style='width: 170px;height: auto; border-radius: 15px;'>";
+        private static readonly string s_logoTag = "<img src='https://i.imgur.com/SJg5nzm.png' style='width: 170px;height: auto; border-radius: 15px;'>";
 
 
 
@@ -37,30 +37,30 @@ namespace TechJobs.Services
                 {
                     
 
-                    string body = NotifyHtml.Replace("{0}", u.FirstName);
-                    body = body.Replace("{1}", j.Name);
-                    body = body.Replace("{2}", "<a href='"+j.Employer.Url+"'>" + j.Employer.Name +"</a>");
-                    body = body.Replace("{3}", j.Employer.Location);
+                    string bodyHTML = s_notifyHTML.Replace("{0}", u.FirstName);
+                    bodyHTML = bodyHTML.Replace("{1}", j.Name);
+                    bodyHTML = bodyHTML.Replace("{2}", "<a href='"+j.Employer.Url+"'>" + j.Employer.Name +"</a>");
+                    bodyHTML = bodyHTML.Replace("{3}", j.Employer.Location);
 
                     var mailMessage = new MailMessage
                     {
                         From = new MailAddress("techjobspersistent@gmail.com","TechJobs"),
                         Subject = "Hey " + u.FirstName + ", new job posting!",
-                        Body = body,
+                        Body = bodyHTML,
                         IsBodyHtml = true,
                     };
 
                     mailMessage.To.Add(u.Email);
 
-                    smtpClient.Send(mailMessage);
+                    s_smtpClient.Send(mailMessage);
                 }
             }
         }
 
         public static void InitialEmail(ApplicationUser user)
         {
-            string bodyHTML = LogoTag + "</br><h2>Thanks for signing up to receive email notifications!</h2>";
-            bodyHTML += Footer;
+            string bodyHTML = s_logoTag + "</br><h2>Thanks for signing up to receive email notifications!</h2>";
+            bodyHTML += s_footer;
             
 
             var mailMessage = new MailMessage
@@ -73,17 +73,17 @@ namespace TechJobs.Services
 
             mailMessage.To.Add(user.Email);
 
-            smtpClient.Send(mailMessage);
+            s_smtpClient.Send(mailMessage);
         }
 
         public static void LocationEmail(List<Job> userJobs, string email)
         {
-            string bodyHTML = LogoTag + "</br>";
+            string bodyHTML = s_logoTag + "</br>";
 
             if (userJobs.Count == 0)
             {
                 bodyHTML += "<h2>There are no jobs currently available in your city!</h1></br><h3>Check back soon!</h3></br>";
-                bodyHTML += Footer;
+                bodyHTML += s_footer;
             }
             else
             {
@@ -95,7 +95,7 @@ namespace TechJobs.Services
                 }
 
                 bodyHTML += "</ul>";
-                bodyHTML += Footer;
+                bodyHTML += s_footer;
             }
 
             var mailMessage = new MailMessage
@@ -108,7 +108,7 @@ namespace TechJobs.Services
 
             mailMessage.To.Add(email);
 
-            smtpClient.Send(mailMessage);
+            s_smtpClient.Send(mailMessage);
 
 
 
