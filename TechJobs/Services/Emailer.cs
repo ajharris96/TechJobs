@@ -21,7 +21,11 @@ namespace TechJobs.Services
         };
 
         private static string NotifyHtml = System.IO.File.ReadAllText("notify.html");
-        public static string footer = "<br><br><br><p style='padding: 20px 0px; font-size: 12px; color: #777777; text-align: center;'>&#xA9; Copyright 2021 TechJobs All Rights Reserved.</p>";
+
+        private static string Footer = "<br><br><br><p style='padding: 20px 0px; font-size: 12px; color: #777777; text-align: center;'>&#xA9; Copyright 2021 TechJobs All Rights Reserved.</p>";
+
+        private static string LogoTag = "<img src='https://i.imgur.com/SJg5nzm.png' style='width: 170px;height: auto; border-radius: 15px;'>";
+
 
 
 
@@ -53,27 +57,10 @@ namespace TechJobs.Services
             }
         }
 
-        public static void LocationEmail(string bodyHTML, ApplicationUser user)
-        {
-            bodyHTML += footer;
-
-            var mailMessage = new MailMessage
-            {
-                From = new MailAddress("techjobspersistent@gmail.com","TechJobs"),
-                Subject = "Jobs in your location!",
-                Body = bodyHTML,
-                IsBodyHtml = true,
-            };
-
-            mailMessage.To.Add(user.Email);
-
-            smtpClient.Send(mailMessage);
-        }
-
         public static void InitialEmail(ApplicationUser user)
         {
-            string bodyHTML = "<img src='https://i.imgur.com/SJg5nzm.png' style='width: 170px;height: auto; border-radius: 15px;'><h2>Thanks for signing up to receive email notifications!</h2>";
-            bodyHTML += footer;
+            string bodyHTML = LogoTag + "</br><h2>Thanks for signing up to receive email notifications!</h2>";
+            bodyHTML += Footer;
             
 
             var mailMessage = new MailMessage
@@ -87,6 +74,44 @@ namespace TechJobs.Services
             mailMessage.To.Add(user.Email);
 
             smtpClient.Send(mailMessage);
+        }
+
+        public static void LocationEmail(List<Job> userJobs, string email)
+        {
+            string bodyHTML = LogoTag + "</br>";
+
+            if (userJobs.Count == 0)
+            {
+                bodyHTML += "<h2>There are no jobs currently available in your city!</h1></br><h3>Check back soon!</h3></br>";
+                bodyHTML += Footer;
+            }
+            else
+            {
+                bodyHTML += "<h2>Here are the best job opportunities available to you!</h1></br><ul>";
+
+                for (int i = 0; i < userJobs.Count; i++)
+                {
+                    bodyHTML += "<li>" + userJobs[i].Name + ", " + "<a href='" + userJobs[i].Employer.Url + "'>" + userJobs[i].Employer.Name + "</a>" + ", " + userJobs[i].Employer.Location + "</li></br>";
+                }
+
+                bodyHTML += "</ul>";
+                bodyHTML += Footer;
+            }
+
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress("techjobspersistent@gmail.com", "TechJobs"),
+                Subject = "Jobs in your location!",
+                Body = bodyHTML,
+                IsBodyHtml = true,
+            };
+
+            mailMessage.To.Add(email);
+
+            smtpClient.Send(mailMessage);
+
+
+
         }
 
     }

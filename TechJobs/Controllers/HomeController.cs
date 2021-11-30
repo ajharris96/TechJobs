@@ -148,29 +148,8 @@ namespace TechJobs.Controllers
                 }
             }
 
-            if (userJobs.Count == 0)
-            {
-                string zeroHTML = "<img src='https://i.imgur.com/SJg5nzm.png' style='width: 170px; height: auto; border-radius: 15px;'></br><h2>There are no jobs currently available in your city!</h1></br>";
-                zeroHTML += Emailer.footer;
-                Emailer.LocationEmail(zeroHTML, user);
-            }
-            else
-            {
-
-                string bodyHTML = "<img src='https://i.imgur.com/SJg5nzm.png' style='width: 170px; height: auto; border-radius: 15px;'></br><h2>Here are the best job opportunities available to you!</h1></br><ul>";
-
-                for (int i = 0; i < userJobs.Count; i++)
-                {
-                    bodyHTML += "<li>" + userJobs[i].Name + ", " + "<a href='" + userJobs[i].Employer.Url + "'>" + userJobs[i].Employer.Name + "</a>" + ", " + userJobs[i].Employer.Location + "</li></br>";
-                }
-
-                bodyHTML += "</ul>";
-
-                Emailer.LocationEmail(bodyHTML, user);
-
-                
-
-            }
+            Emailer.LocationEmail(userJobs, user.Email);
+           
 
             List<Job> jobs1 = context.Jobs.Include(j => j.Employer).ToList();
 
