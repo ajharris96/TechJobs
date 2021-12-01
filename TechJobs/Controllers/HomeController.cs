@@ -35,8 +35,34 @@ namespace TechJobs.Controllers
 
         public IActionResult Index()
         {
-            
-            List<Job> jobs = context.Jobs.Include(j => j.Employer).ToList();
+            ApplicationUser user = context.Users.Where(u => u.UserName == User.Identity.Name).ToList()[0];
+
+            List<UserSkill> userSkills = context.UserSkills.Where(u => u.UserId == user.Id).Include(u => u.Skill).ToList();
+
+            List<JobSkill> jobSkills = new List<JobSkill>();
+
+            List<Job> jobs = new List<Job>();
+
+            foreach (var s in userSkills)
+            {
+                jobSkills.AddRange(context.JobSkills
+                        .Where(j => j.Skill.Name == s.Skill.Name)
+                        .Include(j => j.Job)
+                        .ToList());
+            }
+
+            foreach (var job in jobSkills)
+            {
+                Job foundJob = context.Jobs
+                    .Include(j => j.Employer)
+                    .Single(j => j.Id == job.JobId);
+
+                jobs.Add(foundJob);
+            }
+
+
+
+
             var rnd = new Random();
             List<Job> jobs1 = jobs.OrderBy(item => rnd.Next()).ToList();
 
