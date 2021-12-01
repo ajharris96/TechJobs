@@ -36,7 +36,7 @@
                     <div class="input-group-prepend">
                         <div class="input-group-text">
 
-                            <input type="checkbox" asp-for="Input.Notify" checked="@((await UserManager.GetUserAsync(User)).Notify)"/>
+                            <input type="checkbox" asp-for="Input.Notify" checked="@((await UserManager.GetUserAsync(User)).Notify)" />
 
 
                         </div>
@@ -47,15 +47,35 @@
 
                 <span asp-validation-for="Input.Notify" class="text-danger"></span>
             </div>
+            <p>@Model.MySkills</p>
+            <div class="form-group">
+                <select class="form-control" style="width:250px" asp-for="Input.SkillId">
+                    <option class="dropdown-item" value=0>Add a new skill</option>
+                    @foreach (var s in Model.PossibleSkills)
+                    {
+                        <option class="dropdown-item" value="@s.Id">@s.Name</option>
+                    }
+
+
+                </select>
+                
+            </div>
+
             <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
         </form>
         </br>
-        <p>My Skills:</p>
-        <ul>@foreach (var s in Model.skills)
-        {
-            <li>@s.Skill.Name</li>
-        }
-        </ul>
+        
+      
+
+    @*<form asp-controller="Skill" asp-action="AddJob" method="post">
+        <input type="hidden" value="@Model.Job.Id" name="JobId" />
+        <div class="form-group">
+            <label asp-for="SkillId">Skill: </label>
+            <select class="form-control" style="width:250px" asp-for="SkillId" asp-items="Model.Skills"></select>
+            <span asp-validation-for="SkillId"></span>
+        </div>
+        <input class="btn btn-primary" type="submit" value="Add Skill" />
+    </form>*@
     </div>
 </div>
 

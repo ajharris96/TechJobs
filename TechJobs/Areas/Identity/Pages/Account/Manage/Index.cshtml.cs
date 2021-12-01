@@ -19,7 +19,8 @@ namespace TechJobs.Areas.Identity.Pages.Account.Manage
         private ApplicationDbContext context;
         public List<string> locations;
         public List<UserSkill> skills;
-        
+        public List<Skill> PossibleSkills;
+        public string MySkills;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
@@ -29,7 +30,7 @@ namespace TechJobs.Areas.Identity.Pages.Account.Manage
             _signInManager = signInManager;
             context = dbcontext;
             locations = context.Employers.Select(e => e.Location).Distinct().OrderBy(x => x).ToList();
-
+            PossibleSkills = context.Skills.ToList();
 
         }
 
@@ -54,6 +55,8 @@ namespace TechJobs.Areas.Identity.Pages.Account.Manage
 
             [Display(Name = "Notify me of new job postings")]
             public bool Notify { get; set; }
+
+            public int SkillId { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
@@ -80,6 +83,25 @@ namespace TechJobs.Areas.Identity.Pages.Account.Manage
 
             skills = userSkills;
 
+            foreach (var s in userSkills)
+            {
+                var index = PossibleSkills.FindIndex(x => x.Id == s.SkillId);
+                PossibleSkills.Remove(PossibleSkills[index]);
+            }
+
+
+            
+
+
+
+
+            MySkills = "My Skills: ";
+            foreach (var s in skills)
+            {
+                MySkills += s.Skill.Name + ", ";
+            }
+            MySkills = MySkills.Trim();
+            MySkills = MySkills.TrimEnd(',');
 
 
         }
@@ -131,13 +153,16 @@ namespace TechJobs.Areas.Identity.Pages.Account.Manage
             context.SaveChanges();
 
 
-            //List<UserSkill> userSkills = context.UserSkills
-            //    .Where(u => u.UserId == user1.Id)
-            //    .Include(u => u.Skill)
-            //    .ToList();
+            if (Input.SkillId != 0)
+            {
+                UserSkill newSkill = new UserSkill(user.Id, Input.SkillId);
 
-            //skills = userSkills;
+                context.UserSkills.Add(newSkill);
 
+                context.SaveChanges();
+
+            }
+            
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
