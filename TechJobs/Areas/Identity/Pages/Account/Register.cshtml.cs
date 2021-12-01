@@ -29,6 +29,8 @@ namespace TechJobs.Areas.Identity.Pages.Account
         private ApplicationDbContext context;
         public List<string> locations;
 
+        public List<Skill> PossibleSkills { get; set; }
+
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
@@ -41,7 +43,8 @@ namespace TechJobs.Areas.Identity.Pages.Account
             _emailSender = emailSender;
             context = dbcontext;
             locations = context.Employers.Select(e => e.Location).Distinct().OrderBy(x => x).ToList();
-            
+            PossibleSkills = context.Skills.ToList();
+
         }
 
         [BindProperty]
@@ -85,6 +88,9 @@ namespace TechJobs.Areas.Identity.Pages.Account
             public bool Notify { get; set; }
 
 
+            public List<Skill> Skills { get; set; }
+
+
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -94,7 +100,7 @@ namespace TechJobs.Areas.Identity.Pages.Account
             
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string[] selectedSkills, string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -107,18 +113,31 @@ namespace TechJobs.Areas.Identity.Pages.Account
                     LastName = Input.LastName,
                     Location = Input.Location,
                     Notify = Input.Notify
+                   
                 };
                 if (user.Notify)
                 {
                     Emailer.InitialEmail(user);
                 }
 
+                
 
 
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    foreach (string s in selectedSkills)
+                    {
+
+                        UserSkill newSkill = new UserSkill(user.Id, int.Parse(s));
+
+                        context.UserSkills.Add(newSkill);
+
+
+                    }
+                    context.SaveChanges();
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

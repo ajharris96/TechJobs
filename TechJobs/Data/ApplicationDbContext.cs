@@ -13,6 +13,7 @@ namespace TechJobs.Data
         public DbSet<Employer> Employers { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<JobSkill> JobSkills { get; set; }
+        public DbSet<UserSkill> UserSkills { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -23,7 +24,9 @@ namespace TechJobs.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<JobSkill>()
                 .HasKey(j => new { j.JobId, j.SkillId });
-            
+            modelBuilder.Entity<UserSkill>()
+                .HasKey(j => new { j.UserId, j.SkillId });
+
         }
     }
 }

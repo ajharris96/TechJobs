@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TechJobs.Models;
 using TechJobs.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace TechJobs.Areas.Identity.Pages.Account.Manage
 {
@@ -17,6 +18,7 @@ namespace TechJobs.Areas.Identity.Pages.Account.Manage
         private readonly SignInManager<ApplicationUser> _signInManager;
         private ApplicationDbContext context;
         public List<string> locations;
+        public List<UserSkill> skills;
         
 
         public IndexModel(
@@ -27,7 +29,8 @@ namespace TechJobs.Areas.Identity.Pages.Account.Manage
             _signInManager = signInManager;
             context = dbcontext;
             locations = context.Employers.Select(e => e.Location).Distinct().OrderBy(x => x).ToList();
-            
+
+
         }
 
         public string Username { get; set; }
@@ -66,6 +69,16 @@ namespace TechJobs.Areas.Identity.Pages.Account.Manage
                 PhoneNumber = phoneNumber
                 
             };
+
+            ApplicationUser user1 = context.Users.Where(u => u.UserName == userName).ToList()[0];
+
+
+            List<UserSkill> userSkills = context.UserSkills
+                .Where(u => u.UserId == user1.Id)
+                .Include(u => u.Skill)
+                .ToList();
+
+            skills = userSkills;
 
 
 
@@ -116,6 +129,15 @@ namespace TechJobs.Areas.Identity.Pages.Account.Manage
 
             context.Users.Update(user1);
             context.SaveChanges();
+
+
+            //List<UserSkill> userSkills = context.UserSkills
+            //    .Where(u => u.UserId == user1.Id)
+            //    .Include(u => u.Skill)
+            //    .ToList();
+
+            //skills = userSkills;
+
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

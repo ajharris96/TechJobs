@@ -9,7 +9,7 @@ using TechJobs.Data;
 namespace TechJobs.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211125201747_InitialCreate")]
+    [Migration("20211130212046_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -298,6 +298,26 @@ namespace TechJobs.Migrations
                     b.ToTable("Skills");
                 });
 
+            modelBuilder.Entity("TechJobs.Models.UserSkill", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SkillId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId1")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("UserId", "SkillId");
+
+                    b.HasIndex("SkillId");
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("UserSkills");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -377,6 +397,23 @@ namespace TechJobs.Migrations
                     b.Navigation("Job");
 
                     b.Navigation("Skill");
+                });
+
+            modelBuilder.Entity("TechJobs.Models.UserSkill", b =>
+                {
+                    b.HasOne("TechJobs.Models.Skill", "Skill")
+                        .WithMany()
+                        .HasForeignKey("SkillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TechJobs.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1");
+
+                    b.Navigation("Skill");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TechJobs.Models.Job", b =>

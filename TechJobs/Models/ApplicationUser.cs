@@ -15,7 +15,7 @@ namespace TechJobs.Models
         public bool Notify { get; set; }
         public string Location { get; set; }
         
-
+        public List<UserSkill> UserSkills { get; set; }
 
         public ApplicationUser()
         {
