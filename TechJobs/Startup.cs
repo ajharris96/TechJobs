@@ -48,7 +48,7 @@ namespace TechJobs
 
 
 
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<EmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
 

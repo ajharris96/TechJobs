@@ -25,7 +25,7 @@ namespace TechJobs.Areas.Identity.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
+        private readonly EmailSender _emailSender;
         private ApplicationDbContext context;
         public List<string> locations;
 
@@ -35,7 +35,7 @@ namespace TechJobs.Areas.Identity.Pages.Account
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender, ApplicationDbContext dbcontext)
+            EmailSender emailSender, ApplicationDbContext dbcontext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -117,7 +117,7 @@ namespace TechJobs.Areas.Identity.Pages.Account
                 };
                 if (user.Notify)
                 {
-                    Emailer.InitialEmail(user);
+                    await _emailSender.InitialEmailAsync(user);
                 }
 
                 

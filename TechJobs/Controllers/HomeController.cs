@@ -15,9 +15,7 @@ using System.Net.Mail;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using TechJobs.Services;
-
-
-
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace TechJobs.Controllers
 {
@@ -25,12 +23,12 @@ namespace TechJobs.Controllers
     public class HomeController : Controller
     {
         private ApplicationDbContext context;
-        
+        private readonly EmailSender _emailSender;
 
-        public HomeController(ApplicationDbContext dbContext)
+        public HomeController(ApplicationDbContext dbContext, EmailSender emailSender)
         {
             context = dbContext;
-            
+            _emailSender = emailSender;
         }
 
         public IActionResult Index()
@@ -82,7 +80,7 @@ namespace TechJobs.Controllers
         }
 
         [Authorize(Roles = "manager")]
-        public IActionResult ProcessAddJobForm(AddJobViewModel addJobViewModel, string[] selectedSkills)
+        public async Task<IActionResult> ProcessAddJobFormAsync(AddJobViewModel addJobViewModel, string[] selectedSkills)
         {
             if (ModelState.IsValid)
             {
@@ -122,8 +120,14 @@ namespace TechJobs.Controllers
                 List<ApplicationUser> users = context.Users.ToList();
                 Job newestJob = context.Jobs.Where(j => j.Name == job.Name).Where(j => j.EmployerId == job.EmployerId).Include(j => j.Employer).ToList()[0];
 
-
-                Emailer.Notify(users, newestJob);
+                foreach (var u in users)
+                {
+                    if (u.Notify)
+                    {
+                        await _emailSender.NotifyAsync(u, newestJob);
+                    }
+                }
+                
              
 
 
@@ -153,7 +157,7 @@ namespace TechJobs.Controllers
         }
 
 
-        public IActionResult JobsByMyLocation()
+        public async Task<IActionResult> JobsByMyLocationAsync()
         {
             List<Job> jobs = context.Jobs.ToList();
             List<Employer> employers = context.Employers.ToList();
@@ -174,12 +178,10 @@ namespace TechJobs.Controllers
                 }
             }
 
-            Emailer.LocationEmail(userJobs, user.Email);
-           
+            await _emailSender.LocationEmailAsync(userJobs, user.Email);
 
-            List<Job> jobs1 = context.Jobs.Include(j => j.Employer).ToList();
 
-            return View("Index", jobs1);
+            return RedirectToAction("Index");
         }
     }
 }
